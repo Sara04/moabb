@@ -477,9 +477,9 @@ class bi2013a(BaseDataset):
         =======  =======  =======  =================  ===============  ===============  =================
         Name       #Subj    #Chan  #Trials / class    Trials length    Sampling rate    #Sessions
         =======  =======  =======  =================  ===============  ===============  =================
-        bi2013a       7        16   3200 NT / 640 T   1s               512Hz                   8
-                     17        16    400 NT / 80 T    1s               512Hz                   1
+        bi2013a       24       16   400 NT / 80 T     1s               512Hz            (1-7)8 s|(8-24)1s
         =======  =======  =======  =================  ===============  ===============  =================
+
 
     Dataset following the setup from [1]_ carried-out at University of
     Grenoble Alpes.
@@ -575,11 +575,11 @@ class bi2014a(BaseDataset):
     """P300 dataset bi2014a from a "Brain Invaders" experiment
 
     .. admonition:: Dataset summary
-        ================ ======= ======= ================ =============== =============== ===========
-         Name             #Subj   #Chan   #Trials/class    Trials length   Sampling Rate   #Sessions
-        ================ ======= ======= ================ =============== =============== ===========
-         bi2014a           64      16     794 NT x 159 T        1s              512Hz       up to 3
-        ================ ======= ======= ================ =============== =============== ===========
+        ================ ======= ======= =================== =============== =============== ===========
+         Name             #Subj   #Chan   #Avg. trials/class  Trials length   Sampling Rate   #Sessions
+        ================ ======= ======= =================== =============== =============== ===========
+         bi2014a           64      16     794 NT x 159 T           1s              512Hz       up to 3
+        ================ ======= ======= =================== =============== =============== ===========
 
     This dataset contains electroencephalographic (EEG) recordings of 71 subjects
     playing to a visual P300 Brain-Computer Interface (BCI) videogame named Brain Invaders.
@@ -633,11 +633,11 @@ class bi2014b(BaseDataset):
     """P300 dataset bi2014b from a "Brain Invaders" experiment
 
     .. admonition:: Dataset summary
-        ================ ======= ======= ================ =============== =============== ===========
-         Name             #Subj   #Chan   #Trials/class    Trials length   Sampling Rate   #Sessions
-        ================ ======= ======= ================ =============== =============== ===========
-         bi2014b           38      32     201 NT x 40 T         1s              512Hz           3
-        ================ ======= ======= ================ =============== =============== ===========
+        ================ ======= ======= =================== =============== =============== ===========
+         Name             #Subj   #Chan   #Avg. trials/class  Trials length   Sampling Rate   #Sessions
+        ================ ======= ======= =================== =============== =============== ===========
+         bi2014b           38      32     201 NT x 40 T           1s              512Hz           ?
+        ================ ======= ======= =================== =============== =============== ===========
 
     This dataset contains electroencephalographic (EEG) recordings of 38 subjects playing in
     pair (19 pairs) to the multi-user version of a visual P300-based Brain-Computer Interface (BCI)
@@ -692,11 +692,11 @@ class bi2015a(BaseDataset):
     """P300 dataset bi2015a from a "Brain Invaders" experiment
 
     .. admonition:: Dataset summary
-        ================ ======= ======= ================ =============== =============== ===========
-         Name             #Subj   #Chan   #Trials/class    Trials length   Sampling Rate   #Sessions
-        ================ ======= ======= ================ =============== =============== ===========
-         bi2015a           43      32        5 NT x 1 T         1s              512Hz           3
-        ================ ======= ======= ================ =============== =============== ===========
+        ================ ======= ======= =================== =============== =============== ===========
+         Name             #Subj   #Chan   #Avg. trials/class  Trials length   Sampling Rate   #Sessions
+        ================ ======= ======= =================== =============== =============== ===========
+         bi2015a           43      32        462 NT x 92 T         1s              512Hz           3
+        ================ ======= ======= =================== =============== =============== ===========
 
     This dataset contains electroencephalographic (EEG) recordings
     of 43 subjects playing to a visual P300 Brain-Computer Interface (BCI)
@@ -752,11 +752,11 @@ class bi2015b(BaseDataset):
     """P300 dataset bi2015b from a "Brain Invaders" experiment
 
        .. admonition:: Dataset summary
-        ================ ======= ======= ================ =============== =============== ===========
-         Name             #Subj   #Chan   #Trials/class    Trials length   Sampling Rate   #Sessions
-        ================ ======= ======= ================ =============== =============== ===========
-         bi2015b           44      32        5 NT x 1 T         1s              512Hz           2
-        ================ ======= ======= ================ =============== =============== ===========
+        ================ ======= ======= =================== =============== =============== ===========
+         Name             #Subj   #Chan   #Avg. trials/class  Trials length   Sampling Rate   #Sessions
+        ================ ======= ======= =================== =============== =============== ===========
+         bi2015b           44      32      2159 NT x 480 T         1s              512Hz          1
+        ================ ======= ======= =================== =============== =============== ===========
 
     This dataset contains electroencephalographic (EEG) recordings
     of 44 subjects playing in pair to the multi-user version of a visual
