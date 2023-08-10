@@ -1,11 +1,16 @@
+import inspect
+import shutil
+import tempfile
 import unittest
 
 import mne
 
+import moabb.datasets as db
 from moabb.datasets import Shin2017A, Shin2017B, VirtualReality
+from moabb.datasets.base import BaseDataset
 from moabb.datasets.compound_dataset import CompoundDataset
 from moabb.datasets.fake import FakeDataset, FakeVirtualRealityDataset
-from moabb.datasets.utils import block_rep
+from moabb.datasets.utils import block_rep, dataset_list
 from moabb.paradigms import P300
 
 
@@ -30,7 +35,7 @@ def _run_tests_on_dataset(d):
 
 class Test_Datasets(unittest.TestCase):
     def test_fake_dataset(self):
-        """this test will insure the basedataset works"""
+        """This test will insure the basedataset works."""
         n_subjects = 3
         n_sessions = 2
         n_runs = 2
@@ -57,18 +62,110 @@ class Test_Datasets(unittest.TestCase):
             self.assertEqual(len(data[1]["session_0"]), n_runs)
 
             # We should get a raw array at the end
-            self.assertEqual(type(data[1]["session_0"]["run_0"]), mne.io.RawArray)
+            self.assertIsInstance(data[1]["session_0"]["run_0"], mne.io.BaseRaw)
 
             # bad subject id must raise error
             self.assertRaises(ValueError, ds.get_data, [1000])
 
+    def test_cache_dataset(self):
+        tempdir = tempfile.mkdtemp()
+        for paradigm in ["imagery", "p300", "ssvep"]:
+            dataset = FakeDataset(paradigm=paradigm)
+            # Save cache:
+            with self.assertLogs(
+                logger="moabb.datasets.bids_interface", level="INFO"
+            ) as cm:
+                _ = dataset.get_data(
+                    subjects=[1],
+                    cache_config=dict(
+                        save_raw=True,
+                        use=True,
+                        overwrite_raw=False,
+                        path=tempdir,
+                    ),
+                )
+            print("\n".join(cm.output))
+            expected = [
+                "Attempting to retrieve cache .* datatype-eeg",  # empty pipeline
+                "No cache found at",
+                "Starting caching .* datatype-eeg",
+                "Finished caching .* datatype-eeg",
+            ]
+            self.assertEqual(len(expected), len(cm.output))
+            for i, regex in enumerate(expected):
+                self.assertRegex(cm.output[i], regex)
+
+            # Load cache:
+            with self.assertLogs(
+                logger="moabb.datasets.bids_interface", level="INFO"
+            ) as cm:
+                _ = dataset.get_data(
+                    subjects=[1],
+                    cache_config=dict(
+                        save_raw=True,
+                        use=True,
+                        overwrite_raw=False,
+                        path=tempdir,
+                    ),
+                )
+            print("\n".join(cm.output))
+            expected = [
+                "Attempting to retrieve cache .* datatype-eeg",
+                "Finished reading cache .* datatype-eeg",
+            ]
+            self.assertEqual(len(expected), len(cm.output))
+            for i, regex in enumerate(expected):
+                self.assertRegex(cm.output[i], regex)
+
+            # Overwrite cache:
+            with self.assertLogs(
+                logger="moabb.datasets.bids_interface", level="INFO"
+            ) as cm:
+                _ = dataset.get_data(
+                    subjects=[1],
+                    cache_config=dict(
+                        save_raw=True,
+                        use=True,
+                        overwrite_raw=True,
+                        path=tempdir,
+                    ),
+                )
+            print("\n".join(cm.output))
+            expected = [
+                "Starting erasing cache .* datatype-eeg",
+                "Finished erasing cache .* datatype-eeg",
+                "Starting caching .* datatype-eeg",
+                "Finished caching .* datatype-eeg",
+            ]
+            self.assertEqual(len(expected), len(cm.output))
+            for i, regex in enumerate(expected):
+                self.assertRegex(cm.output[i], regex)
+        shutil.rmtree(tempdir)
+
     def test_dataset_accept(self):
-        """verify that accept licence is working"""
+        """Verify that accept licence is working."""
         # Only Shin2017 (bbci_eeg_fnirs) for now
         for ds in [Shin2017A(), Shin2017B()]:
             # if the data is already downloaded:
             if mne.get_config("MNE_DATASETS_BBCIFNIRS_PATH") is None:
                 self.assertRaises(AttributeError, ds.get_data, [1])
+
+    def test_datasets_init(self):
+        for ds in dataset_list:
+            kwargs = {}
+            if inspect.signature(ds).parameters.get("accept"):
+                kwargs["accept"] = True
+            self.assertIsNotNone(ds(**kwargs))
+
+    def test_dataset_list(self):
+        all_datasets = len(
+            [
+                issubclass(c, BaseDataset)
+                for c in db.__dict__.values()
+                if inspect.isclass(c)
+            ]
+        )
+        assert len(dataset_list) == all_datasets
 
 
 class Test_VirtualReality_Dataset(unittest.TestCase):
@@ -115,7 +212,7 @@ class Test_CompoundDataset(unittest.TestCase):
         super().__init__(*args, **kwargs)
 
     def test_fake_dataset(self):
-        """this test will insure the basedataset works"""
+        """This test will insure the basedataset works."""
         param_list = [(None, None), ("session_0", "run_0"), (["session_0"], ["run_0"])]
         for sessions, runs in param_list:
             with self.subTest():
@@ -132,7 +229,7 @@ class Test_CompoundDataset(unittest.TestCase):
 
                 # Check data type
                 self.assertTrue(isinstance(data, dict))
-                self.assertEqual(type(data[1]["session_0"]["run_0"]), mne.io.RawArray)
+                self.assertIsInstance(data[1]["session_0"]["run_0"], mne.io.BaseRaw)
 
                 # Check data size
                 self.assertEqual(len(data), 1)

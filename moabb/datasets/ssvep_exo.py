@@ -1,6 +1,4 @@
-"""
-SSVEP Exoskeleton dataset.
-"""
+"""SSVEP Exoskeleton dataset."""
 
 from mne.io import Raw
 
@@ -12,7 +10,7 @@ SSVEPEXO_URL = "https://zenodo.org/record/2392979/files/"
 
 
 class SSVEPExo(BaseDataset):
-    """SSVEP Exo dataset
+    """SSVEP Exo dataset.
 
     .. admonition:: Dataset summary
 
@@ -62,14 +60,14 @@ class SSVEPExo(BaseDataset):
             subjects=list(range(1, 13)),
             sessions_per_subject=1,
             events={"13": 2, "17": 3, "21": 4, "rest": 1},
-            code="Exoskeleton_SSVEP",
+            code="Exoskeleton-SSVEP",
             interval=[2, 4],
             paradigm="ssvep",
             doi="10.1016/j.neucom.2016.01.007",
         )
 
     def _get_single_subject_data(self, subject):
-        """Return the data of a single subject"""
+        """Return the data of a single subject."""
 
         out = {}
         paths = self.data_path(subject, update_path=True, verbose=False)

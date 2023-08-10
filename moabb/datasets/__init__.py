@@ -1,5 +1,4 @@
-"""
-A dataset handle and abstract low level access to the data. the dataset will
+"""A dataset handle and abstract low level access to the data. the dataset will
 takes data stored locally, in the format in which they have been downloaded,
 and will convert them into a MNE raw object. There are options to pool all the
 different recording sessions per subject or to evaluate them separately.
@@ -47,5 +46,11 @@ from .ssvep_mamem import MAMEM1, MAMEM2, MAMEM3
 from .ssvep_nakanishi import Nakanishi2015
 from .ssvep_wang import Wang2016
 from .upper_limb import Ofner2017
+from .utils import _init_dataset_list
 from .Weibo2014 import Weibo2014
 from .Zhou2016 import Zhou2016
+
+
+# Call this last in order to make sure the dataset list contains all
+# the datasets imported in this file.
+_init_dataset_list()

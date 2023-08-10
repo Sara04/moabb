@@ -1,6 +1,4 @@
-"""
-Munich MI dataset
-"""
+"""Munich MI dataset."""
 
 import mne
 import numpy as np
@@ -62,7 +60,6 @@ class MunichMI(BaseDataset):
     .. [1] Grosse-Wentrup, Moritz, et al. "Beamforming in noninvasive
            brain–computer interfaces." IEEE Transactions on Biomedical
            Engineering 56.4 (2009): 1209-1219.
-
     """
 
     def __init__(self):
@@ -70,14 +67,14 @@ class MunichMI(BaseDataset):
             subjects=list(range(1, 11)),
             sessions_per_subject=1,
             events=dict(right_hand=2, left_hand=1),
-            code="Grosse-Wentrup 2009",
+            code="GrosseWentrup2009",
             interval=[0, 7],
             paradigm="imagery",
             doi="10.1109/TBME.2008.2009768",
         )
 
     def _get_single_subject_data(self, subject):
-        """return data for a single subject"""
+        """Return data for a single subject."""
         raw = mne.io.read_raw_eeglab(
             self.data_path(subject), preload=True, verbose="ERROR"
         )
